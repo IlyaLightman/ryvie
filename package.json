@@ -15,8 +15,10 @@
   "author": "Ilya Zaytsev <ilya@zaytsev.xyz>",
   "license": "ISC",
   "dependencies": {
+    "@discordjs/opus": "^0.3.2",
     "config": "^3.3.1",
     "discord.js": "^12.2.0",
+    "ffmpeg-static": "^4.2.5",
     "mongoose": "^5.9.20",
     "nodemon": "^2.0.4",
     "simple-youtube-api": "^5.2.1",
