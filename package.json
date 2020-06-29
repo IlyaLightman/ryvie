@@ -20,7 +20,8 @@
     "mongoose": "^5.9.20",
     "nodemon": "^2.0.4",
     "simple-youtube-api": "^5.2.1",
-    "validator": "^13.1.1"
+    "validator": "^13.1.1",
+    "ytdl-core": "^2.1.7"
   },
   "devDependencies": {
     "chalk": "^4.0.0"
