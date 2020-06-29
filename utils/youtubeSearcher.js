@@ -1,5 +1,6 @@
 const { validateURL } = require('ytdl-core')
 const youtube = require('simple-youtube-api')
+const config = require('config')
 
 const YouTube = new youtube(config.get('YOUTUBE_TOKEN'))
 
