@@ -1,0 +1,27 @@
+{
+  "name": "ryvie",
+  "version": "2.0.0",
+  "description": "The best Discord bot",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "dev": "nodemon \"node index\"",
+    "start": "node index"
+  },
+  "keywords": [
+    "discord",
+    "bot"
+  ],
+  "author": "Ilya Zaytsev <ilya@zaytsev.xyz>",
+  "license": "ISC",
+  "dependencies": {
+    "config": "^3.3.1",
+    "discord.js": "^12.2.0",
+    "nodemon": "^2.0.4",
+    "simple-youtube-api": "^5.2.1",
+    "validator": "^13.1.1"
+  },
+  "devDependencies": {
+    "chalk": "^4.0.0"
+  }
+}
