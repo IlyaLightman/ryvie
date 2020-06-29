@@ -4,5 +4,6 @@ module.exports = {
 	cooldown: 10,
 	execute(message) {
 		message.channel.send('Pong')
+		message.channel.send(message.guild.id)
 	}
 }

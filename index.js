@@ -105,6 +105,16 @@ client.on('message', message => {
 	}
 })
 
+// Когда бот присоединяется к серверу
+client.on('guildCreate', guild => {
+	guild.channels.cache.find(c => c.name === 'ryvie2').send('Hi')
+})
+
+// Когда бота кикают с сервера :(
+client.on('guildDelete', guild => {
+	guild.channels.cache.find(c => c.name === 'ryvie2').send(':(')
+})
+
 const start = async () => {
 	try {
 		await mongoose.connect(config.get('MONGO_URI'), {
