@@ -4,6 +4,8 @@ const config = require('config')
 const chalk = require('chalk')
 const fs = require('fs')
 
+const Server = require('./models/Server')
+
 const DISCORD_TOKEN = config.get('DISCORD_TOKEN')
 const prefix = config.get('PREFIX')
 const hearts = config.get('HEARTS')
@@ -42,7 +44,8 @@ client.on('message', message => {
 	if (!message.content.startsWith(prefix) || message.author.bot) return
 
 	const heart = Math.floor(Math.random() * 6)
-	message.react(hearts[heart]).then(() => {})
+	message.react(hearts[heart]).then(() => {
+	})
 
 	const args = message.content.slice(prefix.length).split(/ +/)
 	const commandName = args.shift().toLowerCase()
@@ -107,12 +110,21 @@ client.on('message', message => {
 
 // Когда бот присоединяется к серверу
 client.on('guildCreate', guild => {
+	const server = new Server({
+		id: guild.id
+	})
+
+	server.save().then(() => console.log(
+		chalk.cyan`[NEW SERVER] Сервер ${guild.name} зарегистрирован`))
+
+	// Приветственное сообщение
 	guild.channels.cache.find(c => c.name === 'ryvie2').send('Hi')
 })
 
 // Когда бота кикают с сервера :(
 client.on('guildDelete', guild => {
-	guild.channels.cache.find(c => c.name === 'ryvie2').send(':(')
+	Server.findOneAndDelete({ id: guild.id }).then(() =>
+		console.log(chalk.cyan(`[DEL SERVER] Сервер ${guild.name} удалён`)))
 })
 
 const start = async () => {

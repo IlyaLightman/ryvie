@@ -14,13 +14,20 @@ const schema = new Schema({
 		default: false
 	},
 	toxicityClassifierSettings: {
-		identity_attack: true,
-		insult: true,
-		obscene: true,
-		severe_toxicity: true,
-		sexual_explicit: true,
-		threat: true,
-		toxicity: true
+		identity_attack:
+			{ type: Boolean, default: true },
+		insult:
+			{ type: Boolean, default: true },
+		obscene:
+			{ type: Boolean, default: true },
+		severe_toxicity:
+			{ type: Boolean, default: true },
+		sexual_explicit:
+			{ type: Boolean, default: true },
+		threat:
+			{ type: Boolean, default: true },
+		toxicity:
+			{ type: Boolean, default: true }
 	},
 	keyWordFilter: {
 		type: Boolean,
