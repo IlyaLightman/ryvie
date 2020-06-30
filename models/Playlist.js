@@ -5,7 +5,7 @@ const schema = new Schema({
 		type: String,
 		require: true
 	},
-	music: [
+	songs: [
 		{
 			title: String,
 			url: String

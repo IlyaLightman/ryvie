@@ -1,3 +1,4 @@
+const youtubeSearcher = require('../utils/youtubeSearcher')
 const { create } = require('../player/playlist')
 
 module.exports = {
@@ -13,13 +14,23 @@ module.exports = {
 		switch (command) {
 			case 'create':
 				// access = private/public
-				const [access, title] = args
+				const [access, create_title] = args
 				const isPublic = access !== 'private'
 				const owner = message.author.id
 
-				await create(title, isPublic, owner, serverId)
-				console.log(args)
+				const response = await create(create_title, isPublic, owner, serverId)
+
+				message.channel.send(response)
 				break
+			case 'add':
+				const [add_title, query] = args
+
+				const { url, title } = youtubeSearcher(query)
+				const song = { url, title }
+
+
+				break
+			default: break
 		}
 	}
 }
