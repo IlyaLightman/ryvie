@@ -9,6 +9,12 @@ const schema = new Schema({
 		type: Boolean,
 		default: false
 	},
+	playlists: [
+		{
+			type: Schema.Types.Object,
+			ref: 'Playlist'
+		}
+	],
 	toxicityClassifier: {
 		type: Boolean,
 		default: false

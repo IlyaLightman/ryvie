@@ -3,5 +3,9 @@
   "YOUTUBE_TOKEN": "AIzaSyDVq_zdmUzXGDW-mc3nT83vWY9p6n4nzBg",
   "MONGO_URI": "mongodb://127.0.0.1:27017/ryvie",
   "PREFIX": "$",
-  "HEARTS": ["\uD83D\uDC9A", "\uD83D\uDC9B", "\uD83D\uDC99", "\uD83D\uDC9C", "❤", "\uD83E\uDDE1"]
+  "HEARTS": ["\uD83D\uDC9A", "\uD83D\uDC9B", "\uD83D\uDC99", "\uD83D\uDC9C", "❤", "\uD83E\uDDE1"],
+  "MAX_PLAYLISTS": 5,
+  "PREMIUM_MAX_PLAYLISTS": 50,
+  "MAX_MUSIC_IN_PLAYLIST": 5,
+  "PREMIUM_MAX_MUSIC_IN_PLAYLIST": 40
 }

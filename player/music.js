@@ -37,6 +37,13 @@ const add = async (message, youtube) => {
 				queueContract.connection = await voiceChannel.join()
 			}
 			playStream(message, queueContract.songs[0])
+
+			const queueMessage = new MessageEmbed()
+				.setTitle('Добавлено в очередь')
+				.setColor(0x9966cc)
+				.setDescription(`${song.title} \n ${song.url}`);
+
+			message.channel.send(queueMessage);
 		} catch (err) {
 			console.log(err)
 			queue.delete(message.guild.id)
@@ -45,7 +52,14 @@ const add = async (message, youtube) => {
 	} else {
 		serverQueue.songs.push(song)
 		// console.log(serverQueue.songs)
-		return message.channel.send(`**${song.title}** *добавлено в очередь!*`)
+		// return message.channel.send(`**${song.title}** *добавлено в очередь!*`)
+
+		const queueMessage = new MessageEmbed()
+			.setTitle('Добавлено в очередь')
+			.setColor(0x9966cc)
+			.setDescription(`${song.title} \n ${song.url}`);
+
+		return message.channel.send(queueMessage);
 	}
 }
 
@@ -120,13 +134,10 @@ const showQueue = message => {
 	}
 
 	const queueMessage = new MessageEmbed()
-		// Set the title of the field
 		.setTitle('Очередь прослушивания')
-		// Set the color of the embed
 		.setColor(!serverQueue ? 0xff0000 : 0x228b22)
-		// Set the main content of the embed
 		.setDescription(msg);
-	// Send the embed to the same channel as the message
+
 	message.channel.send(queueMessage);
 }
 
