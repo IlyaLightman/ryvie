@@ -1,3 +1,4 @@
+const { MessageEmbed } = require('discord.js')
 const ytdl = require('ytdl-core')
 
 const queue = new Map()
@@ -110,14 +111,23 @@ const play = (message, number) => {
 
 const showQueue = message => {
 	setPlayer(message)
-	let msg = '***Очередь прослушивания: ***'
 
-	if (!serverQueue) return message.channel.send('*Нечего слушать...*')
+	let msg = ''
+	if (!serverQueue) { msg = 'Очередь пуста :(' } else {
+		serverQueue.songs.forEach((song, index) => {
+			msg += `\n**${index + 1})** [${normalizeSeconds(song.length)}]  *${song.title}*`
+		})
+	}
 
-	serverQueue.songs.forEach((song, index) => {
-		msg += `\n**${index + 1})** [*${normalizeSeconds(song.length)}*]   ${song.title}`
-	})
-	message.channel.send(msg)
+	const queueMessage = new MessageEmbed()
+		// Set the title of the field
+		.setTitle('Очередь прослушивания')
+		// Set the color of the embed
+		.setColor(!serverQueue ? 0xff0000 : 0x228b22)
+		// Set the main content of the embed
+		.setDescription(msg);
+	// Send the embed to the same channel as the message
+	message.channel.send(queueMessage);
 }
 
 const normalizeSeconds = seconds => {
