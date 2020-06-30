@@ -3,7 +3,7 @@ const config = require('config')
 const Playlist = require('../models/Playlist')
 const Server = require('../models/Server')
 
-const create = async (title, owner, serverId, isPublic) => {
+const create = async (title, isPublic, owner, serverId) => {
 	try {
 		const server = await Server.findOne({ id: serverId })
 
@@ -34,4 +34,6 @@ const create = async (title, owner, serverId, isPublic) => {
 	}
 }
 
-module.exports = {}
+module.exports = {
+	create
+}
