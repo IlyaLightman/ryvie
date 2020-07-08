@@ -7,8 +7,14 @@ const schema = new Schema({
 	},
 	songs: [
 		{
-			title: String,
-			url: String
+			title: {
+				type: String,
+				require: true
+			},
+			url: {
+				type: String,
+				require: true
+			}
 		}
 	],
 	owner: {
