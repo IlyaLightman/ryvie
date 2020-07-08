@@ -92,6 +92,19 @@ const show = async (title, serverId) => {
 		const server = await Server.findOne({ id: serverId })
 
 		const playlist = server.playlists.find(p => p.title === title)
+		if (!playlist) return new MessageEmbed()
+			.setTitle('Такого плейлиста нет!')
+			.setColor(0xff0000)
+			.setDescription(`Плейлист ${title} не найден на этом сервере`)
+
+		let message = ''
+		playlist.songs.forEach((song, index) => {
+			message += `${index + 1}) *${song.title}* \n`
+		})
+		return new MessageEmbed()
+			.setTitle(`Плейлист ${playlist.title}`)
+			.setColor(0x228b22)
+			.setDescription(message)
 	} catch (err) {
 		console.log(err)
 		return `Произошла ошибка. Попробуйте позже :(`

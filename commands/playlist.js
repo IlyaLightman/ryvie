@@ -1,5 +1,5 @@
 const youtubeSearcher = require('../utils/youtubeSearcher')
-const { create, add } = require('../player/playlist')
+const { create, add, show } = require('../player/playlist')
 
 module.exports = {
 	name: 'playlist',
@@ -31,6 +31,13 @@ module.exports = {
 				const add_response = await add(add_title, song, userId, serverId)
 
 				message.channel.send(add_response)
+				break
+			case 'show':
+				const [show_title] = args
+
+				const show_response = await show(show_title, serverId)
+
+				message.channel.send(show_response)
 				break
 			default: break
 		}
