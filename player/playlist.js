@@ -4,6 +4,8 @@ const config = require('config')
 // const Playlist = require('../models/Playlist')
 const Server = require('../models/Server')
 
+const musicPlayer = require('./music')
+
 const create = async (title, isPublic, owner, serverId) => {
 	try {
 		const server = await Server.findOne({ id: serverId })
@@ -40,7 +42,7 @@ const create = async (title, isPublic, owner, serverId) => {
 			.setColor(0x3deb3d)
 			.setDescription(`${isPublic ? 'Публичный' : 'Приватный'} плейлист *${title}* успешно создан`)
 	} catch (err) {
-		console.log(err)
+		console.log('Playlist/create', err)
 		return `При создании плейлиста произошла ошибка. Попробуйте позже :(`
 	}
 }
@@ -82,7 +84,7 @@ const add = async (title, song, user, serverId) => {
 			.setColor(0x3deb3d)
 			.setDescription(`*${song.title}* успешно добавлено в плейлист **${playlist.title}**`)
 	} catch (err) {
-		console.log(err)
+		console.log('Playlist/add', err)
 		return `При добавлении произошла ошибка. Попробуйте позже :(`
 	}
 }
@@ -106,11 +108,31 @@ const show = async (title, serverId) => {
 			.setColor(0x228b22)
 			.setDescription(message)
 	} catch (err) {
-		console.log(err)
+		console.log('Playlist/show', err)
+		return `Произошла ошибка. Попробуйте позже :(`
+	}
+}
+
+const play = async (title, serverId, message) => {
+	try {
+		const server = await Server.findOne({ id: serverId })
+
+		const playlist = server.playlists.find(p => p.title === title)
+		if (!playlist) return new MessageEmbed()
+			.setTitle('Такого плейлиста нет!')
+			.setColor(0xff0000)
+			.setDescription(`Плейлист ${title} не найден на этом сервере`)
+
+		console.log(playlist.songs)
+		playlist.songs.forEach(song => {
+			musicPlayer.play(message, song.url)
+		})
+	} catch (err) {
+		console.log('Playlist/play', err)
 		return `Произошла ошибка. Попробуйте позже :(`
 	}
 }
 
 module.exports = {
-	create, add, show
+	create, add, show, play
 }
