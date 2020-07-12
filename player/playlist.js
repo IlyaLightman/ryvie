@@ -160,6 +160,35 @@ const a = async (title, songNumber, serverId, message) => {
 	}
 }
 
+const rem = async (title, songNumber, serverId, message) => {
+	try {
+		const server = await Server.findOne({ id: serverId })
+
+		const playlist = server.playlists.find(p => p.title === title)
+		if (!playlist) return new MessageEmbed()
+			.setTitle('Такого плейлиста нет')
+			.setColor(0xff0000)
+			.setDescription(`Плейлист ${title} не найден на этом сервере :(`)
+
+		if (songNumber > playlist.songs.length) return new MessageEmbed()
+			.setTitle('Нет такого :(')
+			.setColor(0xff0000)
+			.setDescription(`В плейлисте ${title} меньше музыки`)
+
+		playlist.songs.splice(songNumber - 1, 1)
+
+		await server.save()
+
+		return new MessageEmbed()
+			.setTitle('Удалено!')
+			.setColor(0xff0000)
+			.setDescription(`Из плейлиста ${title}`)
+	} catch (err) {
+		console.log('Playlist/rem', err)
+		return `Произошла ошибка. Попробуйте позже :(`
+	}
+}
+
 module.exports = {
 	create, add, show, play
 }
