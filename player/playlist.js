@@ -162,7 +162,7 @@ const a = async (title, songNumber, serverId, message) => {
 			.setColor(0xff0000)
 			.setDescription(`В плейлисте ${title} меньше музыки :(`)
 
-		const song = playlist.songs[songNumber]
+		const song = playlist.songs[songNumber - 1]
 
 		await musicPlayer.add(message, song.url)
 	} catch (err) {

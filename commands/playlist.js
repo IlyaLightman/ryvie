@@ -1,5 +1,8 @@
 const youtubeSearcher = require('../utils/youtubeSearcher')
-const { create, add, show, play } = require('../player/playlist')
+const {
+	create, add, show,
+	play, a, rem,
+	clear, del } = require('../player/playlist')
 
 module.exports = {
 	name: 'playlist',
@@ -43,6 +46,35 @@ module.exports = {
 				const [play_title] = args
 
 				await play(play_title, serverId, message)
+				break
+			case 'a':
+				const [a_title, a_number] = args
+
+				await a(a_title, a_number, serverId, message)
+				break
+			case 'rem':
+				const [rem_title, rem_number] = args
+
+				const rem_response =
+					await rem(rem_title, rem_number, userId, serverId)
+
+				message.channel.send(rem_response)
+				break
+			case 'clear':
+				const [clear_title] = args
+
+				const clear_response =
+					await clear(clear_title, userId, serverId)
+
+				message.channel.send(clear_response)
+				break
+			case 'del':
+				const [del_title] = args
+
+				const del_response =
+					await del(del_title, userId, serverId)
+
+				message.channel.send(del_response)
 				break
 			default: break
 		}
