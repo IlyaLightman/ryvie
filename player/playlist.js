@@ -123,12 +123,39 @@ const play = async (title, serverId, message) => {
 			.setColor(0xff0000)
 			.setDescription(`Плейлист ${title} не найден на этом сервере`)
 
-		console.log(playlist.songs)
-		playlist.songs.forEach(song => {
-			musicPlayer.play(message, song.url)
-		})
+		for (const song of playlist.songs) {
+			await musicPlayer.add(message, song.url)
+		}
+
+		// playlist.songs.forEach(song => {
+		// 	musicPlayer.add(message, song.url)
+		// })
 	} catch (err) {
 		console.log('Playlist/play', err)
+		return `Произошла ошибка. Попробуйте позже :(`
+	}
+}
+
+const a = async (title, songNumber, serverId, message) => {
+	try {
+		const server = await Server.findOne({ id: serverId })
+
+		const playlist = server.playlists.find(p => p.title === title)
+		if (!playlist) return new MessageEmbed()
+			.setTitle('Такого плейлиста нет!')
+			.setColor(0xff0000)
+			.setDescription(`Плейлист ${title} не найден на этом сервере`)
+
+		if (songNumber > playlist.songs.length) return new MessageEmbed()
+			.setTitle('Нет такого!')
+			.setColor(0xff0000)
+			.setDescription(`В плейлисте ${title} меньше музыки :(`)
+
+		const song = playlist.songs[songNumber]
+
+		await musicPlayer.add(message, song.url)
+	} catch (err) {
+		console.log('Playlist/a', err)
 		return `Произошла ошибка. Попробуйте позже :(`
 	}
 }
