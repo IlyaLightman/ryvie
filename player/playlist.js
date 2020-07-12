@@ -181,12 +181,31 @@ const rem = async (title, songNumber, serverId, message) => {
 
 		return new MessageEmbed()
 			.setTitle('Удалено!')
-			.setColor(0xff0000)
+			.setColor(0x228b22)
 			.setDescription(`Из плейлиста ${title}`)
 	} catch (err) {
 		console.log('Playlist/rem', err)
 		return `Произошла ошибка. Попробуйте позже :(`
 	}
+}
+
+const clear = async (title, serverId) => {
+	const server = await Server.findOne({ id: serverId })
+
+	const playlist = server.playlists.find(p => p.title === title)
+	if (!playlist) return new MessageEmbed()
+		.setTitle('Такого плейлиста нет!')
+		.setColor(0xff0000)
+		.setDescription(`Плейлист ${title} не найден на этом сервере :(`)
+
+	playlist.songs = []
+
+	await server.save()
+
+	return new MessageEmbed()
+		.setTitle('Очищено :)')
+		.setColor(0x228b22)
+		.setDescription(`В плейлисте ${title} больше ничего нет`)
 }
 
 module.exports = {
