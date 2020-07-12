@@ -6,6 +6,17 @@ const Server = require('../models/Server')
 
 const musicPlayer = require('./music')
 
+const isAdmin = async (userId, serverId) => {
+	try {
+		const server = await Server.findOne({ id: serverId })
+
+		return server.admins.contains(userId)
+	} catch (err) {
+		console.log('Playlist/isAdmin', err)
+		return false
+	}
+}
+
 const create = async (title, isPublic, owner, serverId) => {
 	try {
 		const server = await Server.findOne({ id: serverId })
@@ -160,7 +171,7 @@ const a = async (title, songNumber, serverId, message) => {
 	}
 }
 
-const rem = async (title, songNumber, serverId, message) => {
+const rem = async (title, songNumber, user, serverId) => {
 	try {
 		const server = await Server.findOne({ id: serverId })
 
@@ -169,6 +180,11 @@ const rem = async (title, songNumber, serverId, message) => {
 			.setTitle('Такого плейлиста нет')
 			.setColor(0xff0000)
 			.setDescription(`Плейлист ${title} не найден на этом сервере :(`)
+
+		if (!(playlist.isPublic || playlist.owner === user)) return new MessageEmbed()
+			.setTitle('У вас нет прав на редактирование этого плейлиста')
+			.setColor(0xff0000)
+			.setDescription(`Вы не можете.... не можете :(`)
 
 		if (songNumber > playlist.songs.length) return new MessageEmbed()
 			.setTitle('Нет такого :(')
@@ -189,25 +205,67 @@ const rem = async (title, songNumber, serverId, message) => {
 	}
 }
 
-const clear = async (title, serverId) => {
-	const server = await Server.findOne({ id: serverId })
+const clear = async (title, user, serverId) => {
+	try {
+		const server = await Server.findOne({ id: serverId })
 
-	const playlist = server.playlists.find(p => p.title === title)
-	if (!playlist) return new MessageEmbed()
-		.setTitle('Такого плейлиста нет!')
-		.setColor(0xff0000)
-		.setDescription(`Плейлист ${title} не найден на этом сервере :(`)
+		const playlist = server.playlists.find(p => p.title === title)
+		if (!playlist) return new MessageEmbed()
+			.setTitle('Такого плейлиста нет!')
+			.setColor(0xff0000)
+			.setDescription(`Плейлист ${title} не найден на этом сервере :(`)
 
-	playlist.songs = []
+		if (!(playlist.isPublic || playlist.owner === user)) return new MessageEmbed()
+			.setTitle('У вас нет прав на очистку этого плейлиста')
+			.setColor(0xff0000)
+			.setDescription(`Вы не можете.... не можете :(`)
 
-	await server.save()
+		playlist.songs = []
 
-	return new MessageEmbed()
-		.setTitle('Очищено :)')
-		.setColor(0x228b22)
-		.setDescription(`В плейлисте ${title} больше ничего нет`)
+		await server.save()
+
+		return new MessageEmbed()
+			.setTitle('Очищено :)')
+			.setColor(0x228b22)
+			.setDescription(`В плейлисте ${title} больше ничего нет`)
+	} catch (err) {
+		console.log('Playlist/clear', err)
+		return `Произошла ошибка. Попробуйте позже :(`
+	}
+
+}
+
+const del = async (title, user, serverId) => {
+	try {
+		const server = await Server.findOne({ id: serverId })
+
+		let currentPlaylistNumber = 0
+		const playlist = server.playlists.find((p, index) => {
+			currentPlaylistNumber = index
+			return p.title === title
+		})
+		if (!playlist) return new MessageEmbed()
+			.setTitle('Такого плейлиста нет!')
+			.setColor(0xff0000)
+			.setDescription(`Плейлист ${title} не найден на этом сервере :(`)
+
+		const isCurrentUserAdmin = await isAdmin(user, serverId)
+
+		if (!(playlist.isPublic || playlist.owner === user || isCurrentUserAdmin)
+		) return new MessageEmbed()
+			.setTitle('У вас нет прав на удаление этого плейлиста')
+			.setColor(0xff0000)
+			.setDescription(`Вы не можете.... не можете!`)
+
+		server.playlists.splice(currentPlaylistNumber, 1)
+
+		await server.save()
+	} catch (err) {
+		console.log('Playlist/del', err)
+		return `Произошла ошибка. Попробуйте позже :(`
+	}
 }
 
 module.exports = {
-	create, add, show, play
+	create, add, show, play, a, rem, clear, del
 }

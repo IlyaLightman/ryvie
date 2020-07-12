@@ -9,6 +9,9 @@ const schema = new Schema({
 		type: Boolean,
 		default: false
 	},
+	admins: [
+		{ type: String }
+	],
 	playlists: [
 		{
 			title: {
