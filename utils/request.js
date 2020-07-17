@@ -1,3 +1,5 @@
+const fetch = require("node-fetch")
+
 const request = async (url, method, body = null, headers = {}) => {
 	try {
 		if (body) {
@@ -19,4 +21,4 @@ const request = async (url, method, body = null, headers = {}) => {
 	}
 }
 
-export default request
+module.exports = request

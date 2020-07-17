@@ -1,5 +1,5 @@
 const request = require('./request')
-const config = request('config')
+const config = require('config')
 
 const YANDEX_OAUTH = config.get('YANDEX_OAUTH')
 
@@ -22,8 +22,8 @@ class yandex {
 	async translate(text, to) {
 		const translatedText = await request(
 			'https://translate.api.cloud.yandex.net/translate/v2/translate',
-			'POST', {}, {
-				'folder_id': 'enpqd1u23osa8vc0fr7m',
+			'POST', {
+				'folder_id': 'b1g4pgne7qsrt8683t0g',
 				'texts': text,
 				'targetLanguageCode': to
 			}, {

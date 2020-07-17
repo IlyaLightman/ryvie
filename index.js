@@ -146,6 +146,7 @@ const start = async () => {
 		})
 
 		await client.login(DISCORD_TOKEN)
+		await yandex.recreateIamToken()
 	} catch (err) {
 		console.log(chalk.red('ERROR'), err)
 	}
