@@ -10,6 +10,8 @@ const DISCORD_TOKEN = config.get('DISCORD_TOKEN')
 const prefix = config.get('PREFIX')
 const hearts = config.get('HEARTS')
 
+const yandex = require('./utils/yandex')
+
 const client = new Discord.Client()
 client.commands = new Discord.Collection()
 
@@ -151,4 +153,8 @@ const start = async () => {
 
 start().then(() => {
 	console.log(chalk.redBright('Ryvie is here!'))
+
+	setInterval(async () => {
+		await yandex.recreateIamToken()
+	}, 3600000)
 })

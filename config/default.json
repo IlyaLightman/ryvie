@@ -2,6 +2,7 @@
   "DISCORD_TOKEN": "NzA2NzgxNzQxNTY1ODcwMTEw.Xq_Q8A.Kpik03kUV9Y1dvS12D6-bquqhcw",
   "YOUTUBE_TOKEN": "AIzaSyDVq_zdmUzXGDW-mc3nT83vWY9p6n4nzBg",
   "MONGO_URI": "mongodb://127.0.0.1:27017/ryvie",
+  "YANDEX_OAUTH": "AgAAAAAfOCStAATuwTeuw-qNcUwiiNZLyoGGJZ0",
   "PREFIX": "$",
   "HEARTS": ["\uD83D\uDC9A", "\uD83D\uDC9B", "\uD83D\uDC99", "\uD83D\uDC9C", "❤", "\uD83E\uDDE1"],
   "MAX_PLAYLISTS": 5,
