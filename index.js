@@ -128,7 +128,7 @@ client.on('guildCreate', guild => {
 		chalk.cyan`[NEW SERVER] Сервер ${guild.name} зарегистрирован`))
 
 	// Приветственное сообщение
-	guild.channels.cache.find(c => c.name === 'ryvie2').send('Hi')
+	// guild.channels.cache.find(c => c.name === 'ryvie2').send('Hi')
 })
 
 // Когда бота кикают с сервера :(
