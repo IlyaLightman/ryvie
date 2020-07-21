@@ -32,7 +32,6 @@
     "ytdl-core": "^2.1.7"
   },
   "devDependencies": {
-    "chalk": "^4.0.0",
-    "node-pre-gyp": "^0.15.0"
+    "chalk": "^4.0.0"
   }
 }
