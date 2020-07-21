@@ -1,27 +1,35 @@
 const toxicityModel = require('@tensorflow-models/toxicity')
-const tf = require('@tensorflow/tfjs')
-const tfNode = require('@tensorflow/tfjs-node')
+require('@tensorflow/tfjs')
+require('@tensorflow/tfjs-node')
 
-const toxicityClassifier = (message, conditions) => {
-	// const {
-	// 	identity_attack,
-	// 	insult,
-	// 	obscene,
-	// 	severe_toxicity,
-	// 	sexual_explicit,
-	// 	threat,
-	// 	toxicity
-	// } = conditions
+const yandex = require('../utils/yandex')
+
+const Server = require('../models/Server')
+
+const toxicityClassifier = async message => {
+	const {
+		identity_attack,
+		insult,
+		obscene,
+		severe_toxicity,
+		sexual_explicit,
+		threat,
+		toxicity
+	} = (await Server.findOne({ id: message.guild.id }))
+		.toxicityClassifierSettings
+
+	const translated = await yandex.translate(
+		message.content.split(' '), 'en')
 
 	// The minimum prediction confidence.
-	const threshold = 0.9
+	const threshold = 0.8
 
 	// console.log(tf.version)
 
 	toxicityModel.load(threshold).then(model => {
-		const sentences = message.content.split(' ')
+		// const sentences = message.content.split(' ')
 
-		model.classify(sentences).then(predictions => {
+		model.classify(translated.split(' ')).then(predictions => {
 			// console.log(predictions)
 			/*
 			prints:
@@ -42,7 +50,7 @@ const toxicityClassifier = (message, conditions) => {
 			...
 			 */
 
-			let msg = ''
+			let msg = `${translated.toString()} \n`
 
 			predictions.forEach(prediction => {
 				const isMatch =
