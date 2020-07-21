@@ -1,62 +1,44 @@
 const toxicityModel = require('@tensorflow-models/toxicity')
-require('@tensorflow/tfjs')
+const tf = require('@tensorflow/tfjs')
 require('@tensorflow/tfjs-node')
+const chalk = require('chalk')
 
 const yandex = require('../utils/yandex')
 
 const Server = require('../models/Server')
 
+console.log(chalk.yellow('TensorFlow version is'),
+	tf.version.tfjs)
+
 const toxicityClassifier = async message => {
-	const {
-		identity_attack,
-		insult,
-		obscene,
-		severe_toxicity,
-		sexual_explicit,
-		threat,
-		toxicity
-	} = (await Server.findOne({ id: message.guild.id }))
-		.toxicityClassifierSettings
+	let toxicityLabels = []
+	const toxicityClassifierSettings =
+		(await Server.findOne({ id: message.guild.id }))
+			.toxicityClassifierSettings
+
+	Object.keys(toxicityClassifierSettings).forEach(condition => {
+		if (toxicityClassifierSettings[condition]) {
+			toxicityLabels.push(condition)
+		}
+	})
+
+	console.log(toxicityLabels)
 
 	const translated = await yandex.translate(
 		message.content.split(' '), 'en')
 
 	// The minimum prediction confidence.
-	const threshold = 0.8
+	const threshold = 0.75
 
-	// console.log(tf.version)
-
-	toxicityModel.load(threshold).then(model => {
-		// const sentences = message.content.split(' ')
-
+	toxicityModel.load(threshold, toxicityLabels).then(model => {
 		model.classify(translated.split(' ')).then(predictions => {
-			// console.log(predictions)
-			/*
-			prints:
-			{
-			  "label": "identity_attack",
-			  "results": [{
-				"probabilities": [0.9659664034843445, 0.03403361141681671],
-				"match": false
-			  }]
-			},
-			{
-			  "label": "insult",
-			  "results": [{
-				"probabilities": [0.08124706149101257, 0.9187529683113098],
-				"match": true
-			  }]
-			},
-			...
-			 */
-
 			let msg = `${translated.toString()} \n`
 
 			predictions.forEach(prediction => {
 				const isMatch =
 					prediction.results.find(
-					result =>
-						result.match === true)
+						result =>
+							result.match === true)
 
 				msg += `${prediction.label} - ${(!!isMatch)} \n`
 			})
