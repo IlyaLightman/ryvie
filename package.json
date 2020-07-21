@@ -16,6 +16,11 @@
   "license": "ISC",
   "dependencies": {
     "@discordjs/opus": "^0.3.2",
+    "@tensorflow-models/toxicity": "^1.2.2",
+    "@tensorflow/tfjs": "^2.0.1",
+    "@tensorflow/tfjs-converter": "^2.0.1",
+    "@tensorflow/tfjs-core": "^2.0.1",
+    "@tensorflow/tfjs-node": "^2.0.1",
     "config": "^3.3.1",
     "discord.js": "^12.2.0",
     "ffmpeg-static": "^4.2.5",
@@ -27,6 +32,7 @@
     "ytdl-core": "^2.1.7"
   },
   "devDependencies": {
-    "chalk": "^4.0.0"
+    "chalk": "^4.0.0",
+    "node-pre-gyp": "^0.15.0"
   }
 }

@@ -15,6 +15,9 @@ const yandex = require('./utils/yandex')
 const client = new Discord.Client()
 client.commands = new Discord.Collection()
 
+const toxicityClassifier =
+	require('./chat-filters/toxicityClassifier')
+
 const commandFiles = fs.readdirSync('./commands').filter(file => {
 	return file.endsWith('.js')
 })
@@ -51,7 +54,11 @@ client.on('message', message => {
 		message.channel.send(embed);
 	}
 
-	if (!message.content.startsWith(prefix) || message.author.bot) return
+	if (message.author.bot) return
+
+	toxicityClassifier(message)
+
+	if (!message.content.startsWith(prefix)) return
 
 	const heart = Math.floor(Math.random() * 6)
 	message.react(hearts[heart]).then(() => {
