@@ -2,6 +2,7 @@ const request = require('./request')
 const config = require('config')
 
 const YANDEX_OAUTH = config.get('YANDEX_OAUTH')
+const YANDEX_FOLDER_ID = config.get('YANDEX_FOLDER_ID')
 
 class yandex {
 	constructor() {
@@ -23,7 +24,7 @@ class yandex {
 		const translatedText = await request(
 			'https://translate.api.cloud.yandex.net/translate/v2/translate',
 			'POST', {
-				'folder_id': 'b1g4pgne7qsrt8683t0g',
+				'folder_id': YANDEX_FOLDER_ID,
 				'texts': text,
 				'targetLanguageCode': to
 			}, {
