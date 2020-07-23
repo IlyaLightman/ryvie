@@ -2,27 +2,24 @@ const toxicityModel = require('@tensorflow-models/toxicity')
 const tf = require('@tensorflow/tfjs')
 require('@tensorflow/tfjs-node')
 const chalk = require('chalk')
+const { MessageEmbed } = require('discord.js')
 
 const yandex = require('../utils/yandex')
-
-const Server = require('../models/Server')
 
 console.log(chalk.yellow('TensorFlow version is'),
 	tf.version.tfjs)
 
-const toxicityClassifier = async message => {
-	let toxicityLabels = []
-	const toxicityClassifierSettings =
-		(await Server.findOne({ id: message.guild.id }))
-			.toxicityClassifierSettings
+const toxicityClassifier = async (message, messageServer) => {
+	if (!messageServer.toxicityClassifier &&
+		!messageServer.premium) return null
 
-	Object.keys(toxicityClassifierSettings).forEach(condition => {
-		if (toxicityClassifierSettings[condition]) {
+	let toxicityLabels = []
+	Object.keys(messageServer.toxicityClassifierSettings).forEach(condition => {
+		if (messageServer.toxicityClassifierSettings[condition]) {
 			toxicityLabels.push(condition)
 		}
 	})
-
-	console.log(toxicityLabels)
+	toxicityLabels.shift()
 
 	const translated = await yandex.translate(
 		message.content.split(' '), 'en')
@@ -32,7 +29,8 @@ const toxicityClassifier = async message => {
 
 	toxicityModel.load(threshold, toxicityLabels).then(model => {
 		model.classify(translated.split(' ')).then(predictions => {
-			let msg = `${translated.toString()} \n`
+			// let msg = `${translated.toString()} \n`
+			let msg = ''
 
 			predictions.forEach(prediction => {
 				const isMatch =
@@ -40,12 +38,33 @@ const toxicityClassifier = async message => {
 						result =>
 							result.match === true)
 
-				msg += `${prediction.label} - ${(!!isMatch)} \n`
+				if (isMatch) msg += `${litLabels[prediction.label]} \n`
 			})
 
-			message.channel.send(msg)
+			if (msg !== '') {
+				msg += `\n**Автор:** ${message.author.username}`
+				msg += `\n**Тег:** ${message.author.tag}`
+				msg += `\n**Сообщение:** ${translated}`
+				msg += `\n**Оригинал:** ${message.content}`
+
+				message.channel.send(new MessageEmbed()
+					.setTitle('Классификатор токсичности')
+					.setColor(0xe879e1)
+					.setDescription(msg)
+				)
+			}
 		})
 	})
+}
+
+const litLabels = {
+	identity_attack: 'Оскорбление личности',
+	insult: 'Оскорбление',
+	obscene: 'Непристойная лексика',
+	severe_toxicity: 'Сильная токсичность',
+	sexual_explicit: 'Сексуально откровенный',
+	threat: 'Угроза',
+	toxicity: 'Токсичность'
 }
 
 module.exports = toxicityClassifier

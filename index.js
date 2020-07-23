@@ -45,18 +45,15 @@ process.on('unhandledRejection', error => {
 	console.error('Unhandled promise rejection:', error);
 })
 
-client.on('message', message => {
-	if (message.content === 'how to embed') {
-		const embed = new Discord.MessageEmbed()
-			.setTitle('A slick little embed')
-			.setColor(0x222222)
-			.setDescription('Hello, this is a slick embed!');
-		message.channel.send(embed);
-	}
-
+client.on('message', async message => {
 	if (message.author.bot) return
 
-	toxicityClassifier(message)
+	const messageServer =
+		(await Server.findOne({ id: message.guild.id }))
+
+	toxicityClassifier(message, messageServer).catch(err => {
+		console.log(chalk.red('Toxicity Classifier Error'), err)
+	})
 
 	if (!message.content.startsWith(prefix)) return
 
@@ -68,7 +65,8 @@ client.on('message', message => {
 	const commandName = args.shift().toLowerCase()
 
 	const command = client.commands.get(commandName)
-		|| client.commands.find(cmd => cmd.aliases && cmd.aliases.includes(commandName))
+		|| client.commands.find(cmd =>
+			cmd.aliases && cmd.aliases.includes(commandName))
 
 	if (!command) return
 
@@ -80,7 +78,8 @@ client.on('message', message => {
 		let reply = `Это так не работает`
 
 		if (command.usage) {
-			reply += `\nВызов должен быть таким: \`${prefix}${command.name} ${command.usage}\``
+			reply += `
+			\nВызов должен быть таким: \`${prefix}${command.name} ${command.usage}\``
 			if (command.examples) {
 				reply += `\nНапример: \`${prefix}${command.name} ${command.examples[0]}\``
 				command.examples.shift()
