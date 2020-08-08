@@ -19,6 +19,8 @@ const add = async (message, youtube) => {
 		length: songInfo.length_seconds
 	}
 
+	// console.log(message.guild.voice.channel)
+
 	if (!serverQueue) {
 		const queueContract = {
 			textChannel: message.channel,
@@ -101,9 +103,11 @@ const skip = message => {
 	serverQueue.connection.dispatcher.emit('end')
 }
 
-const clear = message => {
+const clear = (message, disconnected) => {
 	setPlayer(message)
-	if (!message.member.voice.channel) return message.channel.send(
+
+	if (!disconnected && !message.member.voice.channel)
+		return message.channel.send(
 		'*Вы должны находиться в голосовом канале*')
 	serverQueue.songs = []
 

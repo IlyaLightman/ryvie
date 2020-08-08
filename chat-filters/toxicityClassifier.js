@@ -52,6 +52,22 @@ const toxicityClassifier = async (message, messageServer) => {
 					.setColor(0xe879e1)
 					.setDescription(msg)
 				)
+
+				switch (messageServer.punishmentSettings
+					.toxicityClassifierPunishment) {
+					case 'none':
+						return null
+					case 'ban':
+						return message.guild.member(message.author).ban({
+							reason: messageServer.punishmentSettings.banReason
+							})
+					case 'role':
+						const role = message.guild.roles.cache.find(
+							role => role.name ===
+								messageServer.punishmentSettings.punishmentRole)
+						return role ? message.member.roles.add(role) : null
+					default: return null
+				}
 			}
 		})
 	})

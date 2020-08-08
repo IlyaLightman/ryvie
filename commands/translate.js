@@ -7,9 +7,10 @@ module.exports = {
 	description: 'Список всех команд и информация о них',
 	aliases: ['ts', 'tl'],
 	usage: '[lang text]',
+	// premium: true,
 	cooldown: 5,
-	async execute(message, args) {
-		const server = await Server.findOne({ id: message.guild.id })
+	async execute(message, messageServer, args) {
+		const server = messageServer
 
 		if (!server.premium) {
 			return message.channel.send(new MessageEmbed()

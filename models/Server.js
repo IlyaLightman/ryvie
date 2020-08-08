@@ -67,6 +67,21 @@ const schema = new Schema({
 		toxicity:
 			{ type: Boolean, default: true }
 	},
+	punishmentSettings: {
+		toxicityClassifierPunishment: {
+			// none, ban, role
+			type: String,
+			default: 'none'
+		},
+		punishmentRole: {
+			type: String,
+			default: 'ryviePunishmentRole'
+		},
+		banReason: {
+			type: String,
+			default: 'Классификатор токсичности Ryvie'
+		}
+	},
 	keyWordFilter: {
 		type: Boolean,
 		default: false

@@ -71,7 +71,7 @@ client.on('message', async message => {
 	if (!command) return
 
 	if (command.guildOnly && message.channel.type !== 'text') {
-		return message.reply(`Can't execute that command inside DMs!`)
+		return message.reply(`Команда только для использования на серверах! :(`)
 	}
 
 	if (command.args && !args.length) {
@@ -117,12 +117,17 @@ client.on('message', async message => {
 	}, cooldownAmount)
 
 	try {
-		command.execute(message, args)
+		command.execute(message, messageServer, args)
 	} catch (err) {
 		console.error(err)
 		message.reply(`Произошла ошибка`).then(console.log)
 	}
 })
+
+// client.on('voiceStateUpdate',
+// 	(oldState, newState) => {
+// 	console.log(oldState, newState)
+// })
 
 // Когда бот присоединяется к серверу
 client.on('guildCreate', guild => {
@@ -142,6 +147,10 @@ client.on('guildDelete', guild => {
 	Server.findOneAndDelete({ id: guild.id }).then(() =>
 		console.log(chalk.cyan(`[DEL SERVER] Сервер ${guild.name} удалён`)))
 })
+
+// client.on('debug', debug => {
+// 	console.log(debug)
+// })
 
 const start = async () => {
 	try {

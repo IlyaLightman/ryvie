@@ -5,7 +5,7 @@ module.exports = {
 	description: 'Создаёт голосование с двумя вариантами ответа',
 	cooldown: 5,
 	// $vote 60 Заказывать пиццу?
-	async execute(message, args) {
+	async execute(message, messageServer, args) {
 		let request = ''
 		const seconds = args.shift() * 1000
 		args.forEach(arg => request += `${arg} `)

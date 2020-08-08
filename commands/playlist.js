@@ -9,7 +9,7 @@ module.exports = {
 	aliases: ['pl'],
 	description: 'Работа с плейлистами',
 	cooldown: 1,
-	async execute(message, args) {
+	async execute(message, messageServer, args) {
 		const command = args.shift()
 
 		const serverId = message.guild.id

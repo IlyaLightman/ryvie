@@ -5,7 +5,7 @@ module.exports = {
 	aliases: ['p'],
 	description: 'Пропускает музыку в очереди',
 	cooldown: 1,
-	async execute(message, args) {
+	async execute(message, messageServer, args) {
 		await play(message, args[0])
 	}
 }
