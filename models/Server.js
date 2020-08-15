@@ -71,7 +71,7 @@ const schema = new Schema({
 		toxicityClassifierPunishment: {
 			// none, ban, role
 			type: String,
-			default: 'none'
+			default: 'role'
 		},
 		punishmentRole: {
 			type: String,
@@ -80,6 +80,10 @@ const schema = new Schema({
 		banReason: {
 			type: String,
 			default: 'Классификатор токсичности Ryvie'
+		},
+		banDays: {
+			type: Number,
+			default: 1
 		}
 	},
 	keyWordFilter: {

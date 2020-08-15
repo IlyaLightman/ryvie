@@ -59,7 +59,8 @@ const toxicityClassifier = async (message, messageServer) => {
 						return null
 					case 'ban':
 						return message.guild.member(message.author).ban({
-							reason: messageServer.punishmentSettings.banReason
+								reason: messageServer.punishmentSettings.banReason,
+								days: messageServer.punishmentSettings.banDays
 							})
 					case 'role':
 						const role = message.guild.roles.cache.find(
