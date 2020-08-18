@@ -9,9 +9,18 @@ const schema = new Schema({
 		type: Boolean,
 		default: false
 	},
-	admins: [
-		{ type: String }
-	],
+	ryvieControlling: {
+		admins: [
+			{ type: String }
+		],
+		controlRoles: [
+			{ type: String }
+		],
+		canAdminsControlRyvie: {
+			type: Boolean,
+			default: true
+		}
+	},
 	playlists: [
 		{
 			title: {

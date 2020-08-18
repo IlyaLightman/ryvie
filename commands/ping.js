@@ -5,5 +5,6 @@ module.exports = {
 	execute(message) {
 		message.channel.send('Pong')
 		message.channel.send(message.guild.id)
+		message.channel.send(message.author.id)
 	}
 }

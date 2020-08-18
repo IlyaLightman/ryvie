@@ -28,7 +28,7 @@ module.exports = {
 			setTimeout(() => {
 				message.guild.member(message.author).ban({
 					days: 1,
-					reason: 'Проиграл даже в рулетку...'
+					reason: 'Проиграл даже в рулетку....'
 				})
 			}, 3500)
 		}

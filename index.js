@@ -135,6 +135,9 @@ client.on('guildCreate', guild => {
 		id: guild.id
 	})
 
+	console.log(guild.owner.user.id)
+	server.ryvieControlling.admins.push(`${guild.owner.user.id}`)
+
 	server.save().then(() => console.log(
 		chalk.cyan`[NEW SERVER] Сервер ${guild.name} зарегистрирован`))
 
