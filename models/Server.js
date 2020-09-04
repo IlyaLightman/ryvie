@@ -16,6 +16,7 @@ const schema = new Schema({
 		controlRoles: [
 			{ type: String }
 		],
+		// Doesn't work (now)
 		canAdminsControlRyvie: {
 			type: Boolean,
 			default: true

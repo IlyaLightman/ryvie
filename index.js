@@ -141,19 +141,13 @@ client.on('guildCreate', guild => {
 	server.save().then(() => console.log(
 		chalk.cyan`[NEW SERVER] Сервер ${guild.name} зарегистрирован`))
 
-	// Приветственное сообщение
 	// guild.channels.cache.find(c => c.name === 'ryvie2').send('Hi')
 })
 
-// Когда бота кикают с сервера :(
 client.on('guildDelete', guild => {
 	Server.findOneAndDelete({ id: guild.id }).then(() =>
 		console.log(chalk.cyan(`[DEL SERVER] Сервер ${guild.name} удалён`)))
 })
-
-// client.on('debug', debug => {
-// 	console.log(debug)
-// })
 
 const start = async () => {
 	try {
