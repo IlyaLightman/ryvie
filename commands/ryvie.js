@@ -16,5 +16,9 @@ module.exports = {
 		if (!access) return message.channel.send('*Access Denied*')
 
 		// Basic Ryvie controlling
+
+		const action = args[0]
+
+		console.log(action)
 	}
 }

@@ -1,8 +1,10 @@
 const { validateURL } = require('ytdl-core')
 const youtube = require('simple-youtube-api')
-const config = require('config')
+// const config = require('config')
+require('dotenv').config()
 
-const YouTube = new youtube(config.get('YOUTUBE_TOKEN'))
+// const YouTube = new youtube(config.get('YOUTUBE_TOKEN'))
+const YouTube = new youtube(process.env.YOUTUBE_TOKEN)
 
 const youtubeSearcher = async args => {
 	let url = args[0]

@@ -1,8 +1,11 @@
 const request = require('./request')
-const config = require('config')
+// const config = require('config')
+require('dotenv').config()
 
-const YANDEX_OAUTH = config.get('YANDEX_OAUTH')
-const YANDEX_FOLDER_ID = config.get('YANDEX_FOLDER_ID')
+// const YANDEX_OAUTH = config.get('YANDEX_OAUTH')
+// const YANDEX_FOLDER_ID = config.get('YANDEX_FOLDER_ID')
+const YANDEX_OAUTH = process.env.YANDEX_OAUTH
+const YANDEX_FOLDER_ID = process.env.YANDEX_FOLDER_ID
 
 class yandex {
 	constructor() {

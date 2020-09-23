@@ -3,10 +3,12 @@ const Discord = require('discord.js')
 const config = require('config')
 const chalk = require('chalk')
 const fs = require('fs')
+require('dotenv').config()
 
 const Server = require('./models/Server')
 
-const DISCORD_TOKEN = config.get('DISCORD_TOKEN')
+const DISCORD_TOKEN = process.env.DISCORD_TOKEN
+// const DISCORD_TOKEN = config.get('DISCORD_TOKEN')
 const prefix = config.get('PREFIX')
 const hearts = config.get('HEARTS')
 
@@ -151,7 +153,8 @@ client.on('guildDelete', guild => {
 
 const start = async () => {
 	try {
-		await mongoose.connect(config.get('MONGO_URI'), {
+		// await mongoose.connect(config.get('MONGO_URI'), {
+		await mongoose.connect(process.env.MONGO_URI, {
 			useNewUrlParser: true,
 			useUnifiedTopology: true,
 			useCreateIndex: true
@@ -168,6 +171,7 @@ start().then(() => {
 	console.log(chalk.redBright('Ryvie is here!'))
 
 	setInterval(async () => {
+		console.log('Recreating Yandex IamToken')
 		await yandex.recreateIamToken()
 	}, 3600000)
 })
