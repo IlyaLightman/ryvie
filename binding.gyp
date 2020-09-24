@@ -1,8 +1,7 @@
 {
   "targets": [
     {
-      "target_name": "binding",
-      "sources": [ "src/binding.cc" ]
+      "target_name": "binding"
     }
   ]
 }
