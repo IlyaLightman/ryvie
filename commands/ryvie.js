@@ -42,7 +42,7 @@ function id(message, messageServer) {
 }
 
 async function roleControl(message, messageServer, role) {
-	messageServer.ryvieControlling.controlRoles[0] = role
+	messageServer.ryvieControlling.controlRoles = [role]
 	await messageServer.save()
 	message.channel.send(`Роль ${role} теперь может управлять Райви`)
 }

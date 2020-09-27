@@ -33,7 +33,5 @@
     "ytdl-core": "^2.1.7",
     "chalk": "^4.0.0"
   },
-  "devDependencies": {
-
-  }
+  "devDependencies": {}
 }
