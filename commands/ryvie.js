@@ -19,17 +19,26 @@ module.exports = {
 		// Basic Ryvie controlling
 
 		const action = args[0]
+		const subAction = args[1]
+		args.shift(); args.shift()
 
 		switch (action) {
 			case 'id':
 				return id(message, messageServer)
 			case 'role':
-				if (args[1] === 'control') {
+				if (subAction === 'control') {
+					const role = args.toString()
 					return roleControl(
 						message, messageServer, args[2]).then()
-				} else if (args[1] === 'punishment') {
+				} else if (subAction === 'punishment') {
 					return rolePunishment(
 						message, messageServer, args[2]).then()
+				}
+			case 'classifier':
+				if (subAction === 'switch') {
+					return switchClassifier(message, messageServer).then()
+				} else if (subAction === 'set') {
+					return setClassifier(message, messageServer, args).then()
 				}
 		}
 
@@ -51,6 +60,37 @@ async function rolePunishment(message, messageServer, role) {
 	messageServer.punishmentSettings.punishmentRole = role
 	await messageServer.save()
 	message.channel.send(`Роль ${role} теперь роль наказания Райви`)
+}
+
+async function switchClassifier(message, messageServer) {
+	messageServer.toxicityClassifier = true
+	await messageServer.save()
+	message.channel.send(`Классификатор токсичности 
+		${messageServer.toxicityClassifier ? 'включен' : 'отключен'}`)
+}
+
+async function setClassifier(message, messageServer, settings) {
+	// settings is [boolean] * 7
+	messageServer.toxicityClassifierSettings.map((set, index) => {
+		return !!settings[index]
+	})
+	await messageServer.save()
+	message.channel.send('Настройки классификатора были изменены')
+}
+
+async function punishment(message, messageServer, pnsh) {
+	if (pnsh !== 'role' && pnsh !== 'ban' && pnsh !== 'none') return
+
+	messageServer.punishmentSettings.toxicityClassifierPunishment = pnsh
+	await messageServer.save()
+	message.channel.send('Способ наказания изменён')
+}
+
+async function ban(message, messageServer, days, reason) {
+	messageServer.punishmentSettings.banDays = days
+	messageServer.punishmentSettings.banReason = reason
+	await messageServer.save()
+	message.channel.send('Настройки бана изменены')
 }
 
 // $ryvie id - возвращает айди для генерации кода управления для сайта
