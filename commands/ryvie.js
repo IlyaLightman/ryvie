@@ -100,3 +100,5 @@ async function ban(message, messageServer, days, reason) {
 // $ryvie classifier set <0 0 0 0 0 0 0 / 1> - настройка классификтора
 // $ryvie punishment <none / ban / role> - выбор наказания
 // $ryvie ban <кол-во дней> <причина> - настройка бана
+
+// $ryvie use key <key> - использовать ключ для чего-то
