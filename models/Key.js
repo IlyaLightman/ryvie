@@ -16,4 +16,4 @@ const schema = new Schema({
 	}
 })
 
-module.exports = model('Playlist', schema)
+module.exports = model('Key', schema)
