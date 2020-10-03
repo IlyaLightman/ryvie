@@ -1,6 +1,6 @@
 module.exports = {
 	name: 'ryvie',
-	description: 'Ryvie Controlling Panel',
+	description: 'Ryvie Controlling Commands',
 	cooldown: 10,
 	execute(message, messageServer, args) {
 		const authorId = message.author.id
@@ -20,26 +20,45 @@ module.exports = {
 
 		const action = args[0]
 		const subAction = args[1]
-		args.shift(); args.shift()
+		args.shift()
 
 		switch (action) {
 			case 'id':
 				return id(message, messageServer)
 			case 'role':
+				args.shift()
+				const role = args.join(' ')
 				if (subAction === 'control') {
-					const role = args.toString()
 					return roleControl(
-						message, messageServer, args[2]).then()
+						message, messageServer, role).then()
 				} else if (subAction === 'punishment') {
 					return rolePunishment(
-						message, messageServer, args[2]).then()
+						message, messageServer, role).then()
 				}
+				break
 			case 'classifier':
+				args.shift()
 				if (subAction === 'switch') {
 					return switchClassifier(message, messageServer).then()
 				} else if (subAction === 'set') {
-					return setClassifier(message, messageServer, args).then()
+					// TODO: settings validation
+
+					const settings = args // [0, 0, 0, 0, 0, 0, 0]
+					return setClassifier(message, messageServer, settings).then()
 				}
+				break
+			case 'punishment':
+				if (['none', 'ban', 'role'].includes(args[1])) {
+					return punishment(message, messageServer, args[1]).then()
+				}
+				break
+			case 'ban':
+				const days =
+					(args[1] >= 0 && args[1] <= 365)
+						? Math.floor(args[1]) : 365
+				args.shift()
+				const reason = args.join(' ')
+				return ban(message, messageServer, days, reason).then()
 		}
 
 		console.log(action)
@@ -79,7 +98,7 @@ async function setClassifier(message, messageServer, settings) {
 }
 
 async function punishment(message, messageServer, pnsh) {
-	if (pnsh !== 'role' && pnsh !== 'ban' && pnsh !== 'none') return
+	// if (pnsh !== 'role' && pnsh !== 'ban' && pnsh !== 'none') return
 
 	messageServer.punishmentSettings.toxicityClassifierPunishment = pnsh
 	await messageServer.save()
@@ -91,6 +110,10 @@ async function ban(message, messageServer, days, reason) {
 	messageServer.punishmentSettings.banReason = reason
 	await messageServer.save()
 	message.channel.send('Настройки бана изменены')
+}
+
+function errorMessage(message) {
+	message.channel.send('Это так не работает')
 }
 
 // $ryvie id - возвращает айди для генерации кода управления для сайта
